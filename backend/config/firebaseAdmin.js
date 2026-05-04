@@ -1,25 +1,19 @@
 import admin from "firebase-admin";
-import fs from "fs";
-import path from "path";
 
-const serviceAccountPath = path.join(
-  process.cwd(),
-  "config",
-  "serviceAccountKey.json"
-);
+const serviceAccount = {
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+  privateKey: process.env.FIREBASE_PRIVATE_KEY
+    ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
+    : undefined,
+};
 
-if (!fs.existsSync(serviceAccountPath)) {
-  throw new Error("❌ serviceAccountKey.json not found in /config");
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+
+  console.log("🔥 Firebase Admin Initialized");
 }
-
-const serviceAccount = JSON.parse(
-  fs.readFileSync(serviceAccountPath, "utf-8")
-);
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
-console.log("🔥 Firebase Admin Initialized");
 
 export default admin;
