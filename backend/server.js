@@ -5,7 +5,6 @@ import app from './app.js';
 import connectDB from './config/db.js';
 import './cron/taskCron.js';
 
-console.log("MONGO_URI:", process.env.MONGO_URI);
 
 const startServer = async () => {
   try {
