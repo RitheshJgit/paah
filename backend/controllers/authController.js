@@ -1,7 +1,7 @@
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import admin from '../config/firebaseAdmin.js';
+// import admin from '../config/firebaseAdmin.js';
 import { sendResetPasswordEmail ,sendOTPEmail } from '../services/emailService.js';
 import { generateToken } from '../utils/generateToken.js';
 
@@ -205,43 +205,43 @@ export const resetPasswordWithOTP = async (req, res) => {
   }
 };
 
-export const socialLogin = async (req, res) => {
-  try {
-    const { token } = req.body;
+// export const socialLogin = async (req, res) => {
+//   try {
+//     const { token } = req.body;
 
-    if (!token) {
-      return res.status(400).json({ msg: "Token missing" });
-    }
+//     if (!token) {
+//       return res.status(400).json({ msg: "Token missing" });
+//     }
 
-    // 🔐 VERIFY FIREBASE TOKEN
-    const decoded = await admin.auth().verifyIdToken(token);
+//     // 🔐 VERIFY FIREBASE TOKEN
+//     const decoded = await admin.auth().verifyIdToken(token);
 
-    let user = await User.findOne({ email: decoded.email });
+//     let user = await User.findOne({ email: decoded.email });
 
-    // 🆕 CREATE USER IF NOT EXISTS
-    if (!user) {
-  user = await User.create({
-    name: decoded.name || "User",
-    email: decoded.email,
-    password: "SOCIAL_LOGIN",
+//     // 🆕 CREATE USER IF NOT EXISTS
+//     if (!user) {
+//   user = await User.create({
+//     name: decoded.name || "User",
+//     email: decoded.email,
+//     password: "SOCIAL_LOGIN",
 
-    // 🔥 ADD THESE
-    role: "user",
-    credits: 0,
-    teamId: null
-  });
-}
+//     // 🔥 ADD THESE
+//     role: "user",
+//     credits: 0,
+//     teamId: null
+//   });
+// }
 
-    res.json({
-  _id: user._id,
-  name: user.name,
-  email: user.email,
-  role: user.role,   // ✅ ADD THIS
-  token: generateToken(user._id)
-});
+//     res.json({
+//   _id: user._id,
+//   name: user.name,
+//   email: user.email,
+//   role: user.role,   // ✅ ADD THIS
+//   token: generateToken(user._id)
+// });
 
-  } catch (err) {
-    console.error("SOCIAL LOGIN ERROR:", err.message);
-    res.status(500).json({ msg: err.message });
-  }
-};
+//   } catch (err) {
+//     console.error("SOCIAL LOGIN ERROR:", err.message);
+//     res.status(500).json({ msg: err.message });
+//   }
+// };
