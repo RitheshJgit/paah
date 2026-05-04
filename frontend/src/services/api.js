@@ -1,15 +1,18 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 
-// ❗ Safety check (helps catch env issues in production)
+// ❗ Debug (helps verify in Netlify)
+console.log("🌐 API URL:", API_URL);
+
 if (!API_URL) {
   console.error("❌ VITE_API_URL is not defined");
 }
 
 const api = axios.create({
-  baseURL: API_URL, // should include /api
-  withCredentials: true, // useful if you later use cookies/auth
+  baseURL: API_URL, // must include /api
+  withCredentials: true,
 });
 
 // 🔐 Attach token automatically
